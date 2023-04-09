@@ -346,7 +346,6 @@ public:
                 }
                 taken.push_back(Base);
                 std::cout << Base << "\n";
-                int who = starts;
                 for (const int pos : {(starts + 1) % 4, (starts + 2) % 4, (starts + 3) % 4}) {
                     Card Down;
                     if (pos == 0) {
@@ -358,7 +357,7 @@ public:
                     taken.push_back(Down);
                     std::cout << Down << "\n";
                     if (Down.getCardInfo().first == 7 || Down.getCardInfo().first == Base.getCardInfo().first) {
-                        changed = who % 2 != starts % 2;
+                        changed = pos % 2 != starts % 2;
                         starts = pos;
                     }
                 }
