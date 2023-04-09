@@ -197,7 +197,7 @@ public:
         return (deckSize == 0);
     }
     void shuffleDeck() {
-        random_shuffle(cards.begin(), cards.end());
+        std::shuffle(cards.begin(), cards.end(), std::default_random_engine(0));
     }
     const Card getCard() {
         int pos = distr(gen);
@@ -234,9 +234,6 @@ public:
     }
     int getNumberOfCards() {
         return (int)cards.size();
-    }
-    int getPoints() {
-        return points;
     }
     void updateHand(std::vector<Card> &taken) {
         for (Card &C : taken) {
