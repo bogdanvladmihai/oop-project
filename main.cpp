@@ -232,6 +232,12 @@ public:
         cards.erase(cards.begin() + pos);
         return answer;
     }
+    std::vector<Card> getCards() {
+        return cards;
+    }
+    int getPoints() {
+        return points;
+    }
     int getNumberOfCards() {
         return (int)cards.size();
     }
@@ -324,8 +330,6 @@ private:
 public:
     Game() : players(4), D(13), score(0, 0), roundsPlayed(0), starts(0) {}
     void playRound() {
-        D.resize(13);
-        D.shuffleDeck();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 players[i].addCard(D.getCardAndRemoveIt());
@@ -334,40 +338,33 @@ public:
         // TODO: add some corner cases
         while (!D.empty()) {
             std::vector<Card> taken;
-            while (true) {
-                bool changed = false;
-                std::cout << players[0] << "\n";
-                Card Base;
-                if (starts == 0) {
+            std::cout << players[0] << "\n";
+            Card Base;
+            if (starts == 0) {
+                int id; std::cout << "Select the i-th card: "; std::cin >> id;
+                Base = players[0].getCard(id);
+            } else {
+                Base = players[starts].getCard(0);
+            }
+            taken.push_back(Base);
+            std::cout << Base << "\n";
+            for (const int pos : {(starts + 1) % 4, (starts + 2) % 4, (starts + 3) % 4}) {
+                Card Down;
+                if (pos == 0) {
                     int id; std::cout << "Select the i-th card: "; std::cin >> id;
-                    Base = players[0].getCard(id);
+                    Down = players[0].move(Base.getCardInfo().first, (starts % 2 == pos % 2), id);
                 } else {
-                    Base = players[starts].getCard(0);
+                    Down = players[pos].move(Base.getCardInfo().first, (starts % 2 == pos % 2));
                 }
-                taken.push_back(Base);
-                std::cout << Base << "\n";
-                for (const int pos : {(starts + 1) % 4, (starts + 2) % 4, (starts + 3) % 4}) {
-                    Card Down;
-                    if (pos == 0) {
-                        int id; std::cout << "Select the i-th card: "; std::cin >> id;
-                        Down = players[0].move(Base.getCardInfo().first, (starts % 2 == pos % 2), id);
-                    } else {
-                        Down = players[pos].move(Base.getCardInfo().first, (starts % 2 == pos % 2));
-                    }
-                    taken.push_back(Down);
-                    std::cout << Down << "\n";
-                    if (Down.getCardInfo().first == 7 || Down.getCardInfo().first == Base.getCardInfo().first) {
-                        changed = pos % 2 != starts % 2;
-                        starts = pos;
-                    }
-                }
-                std::cout << "##########################################\n";
-                if (!changed || D.empty() || players[0].getNumberOfCards() == 0) {
-                    std::cout << "Hard taken by " << (starts % 2 == 0 ? "your team!\n" : "oposite team!\n");
-                    players[starts].updateHand(taken);
-                    break;
+                taken.push_back(Down);
+                std::cout << Down << "\n";
+                if (Down.getCardInfo().first == 7 || Down.getCardInfo().first == Base.getCardInfo().first) {
+                    starts = pos;
                 }
             }
+            std::cout << "##########################################\n";
+            std::cout << "Hard taken by " << (starts % 2 == 0 ? "your team!\n" : "oposite team!\n");
+            players[starts].updateHand(taken);
             int numberOfCards = players[0].getNumberOfCards(), X = (int)D.size() / 4;
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < std::min(4 - numberOfCards, X); j++) {
@@ -376,6 +373,19 @@ public:
             }
         }
         roundsPlayed++;
+        if (players[0].getPoints() + players[2].getPoints() > players[1].getPoints() + players[3].getPoints()) {
+            score.first++;
+        } else if (players[0].getPoints() + players[2].getPoints() < players[1].getPoints() + players[3].getPoints()) {
+            score.second++;
+        }
+
+        D = Deck(13);
+        D.shuffleDeck();
+        for (int i = 0; i < 4; i++) {
+            players[i] = Player();
+        }
+        players.clear();
+        players = std::vector<Player>(4);
     }
     bool finished() {
         if (score.first == 8 || score.second == 8) {
