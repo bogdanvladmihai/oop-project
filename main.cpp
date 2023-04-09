@@ -221,9 +221,6 @@ public:
         cards.erase(cards.begin() + pos);
         return answer;
     }
-    std::vector<Card> getCards() {
-        return cards;
-    }
     int getPoints() {
         return points;
     }
