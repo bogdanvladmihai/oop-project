@@ -10,7 +10,7 @@ private:
     int cardValue, color;
 public:
     Card() {}
-    Card(const int _cardValue, int _color = 0) : design(DESIGN_SIZE, std::string("             ")), cardValue(_cardValue), color(_color) {
+    explicit Card(const int _cardValue, int _color = 0) : design(DESIGN_SIZE, std::string("             ")), cardValue(_cardValue), color(_color) {
         for (int i = 0; i < DESIGN_SIZE; i++) {
             design[i][0] = design[i][DESIGN_SIZE - 1] = '|';
             design[0][i] = design[DESIGN_SIZE - 1][i] = '-';
@@ -166,7 +166,7 @@ private:
     std::mt19937 gen;
     std::uniform_int_distribution<int> distr;
 public:
-    Deck(int _deckSize) : deckSize(_deckSize) {
+    explicit Deck(int _deckSize) : deckSize(_deckSize) {
         for (int i = 0; i < deckSize; i++) {
             for (int color = 0; color < 4; color++) {
                 cards.push_back(Card(i + 2, color));
