@@ -335,7 +335,6 @@ public:
         while (!D.empty()) {
             std::vector<Card> taken;
             while (true) {
-                int who = starts;
                 bool changed = false;
                 std::cout << players[0] << "\n";
                 Card Base;
@@ -347,26 +346,26 @@ public:
                 }
                 taken.push_back(Base);
                 std::cout << Base << "\n";
-                for (int i = 0; i < 3; i++) {
-                    int pos = (starts + i + 1) % 4;
+                int who = starts;
+                for (const int pos : {(starts + 1) % 4, (starts + 2) % 4, (starts + 3) % 4}) {
                     Card Down;
                     if (pos == 0) {
                         int id; std::cout << "Select the i-th card: "; std::cin >> id;
-                        Down = players[0].move(Base.getCardInfo().first, who, id);
+                        Down = players[0].move(Base.getCardInfo().first, (starts % 2 == pos % 2), id);
                     } else {
-                        Down = players[pos].move(Base.getCardInfo().first, who);
+                        Down = players[pos].move(Base.getCardInfo().first, (starts % 2 == pos % 2));
                     }
                     taken.push_back(Down);
                     std::cout << Down << "\n";
                     if (Down.getCardInfo().first == 7 || Down.getCardInfo().first == Base.getCardInfo().first) {
-                        changed |= (who % 2 != starts % 2);
-                        who = starts;
+                        changed = who % 2 != starts % 2;
+                        starts = pos;
                     }
                 }
-                std::cout << "###########################\n";
-                starts = who;
-                if (!changed || D.empty()) {
-                    players[who].updateHand(taken);
+                std::cout << "##########################################\n";
+                if (!changed || D.empty() || players[0].getNumberOfCards() == 0) {
+                    std::cout << "Hard taken by " << (starts % 2 == 0 ? "your team!\n" : "oposite team!\n");
+                    players[starts].updateHand(taken);
                     break;
                 }
             }
