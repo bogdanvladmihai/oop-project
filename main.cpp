@@ -182,17 +182,6 @@ public:
     int size() {
         return deckSize;
     }
-    void resize(int _deckSize) {
-        deckSize = _deckSize;
-        cards.clear();
-        for (int i = 0; i < deckSize; i++) {
-            for (int color = 0; color < 4; color++) {
-                cards.push_back(Card(i + 2, color));
-            }
-        }
-        deckSize *= 4;
-        distr = std::uniform_int_distribution<int>(0, deckSize - 1);
-    }
     bool empty() {
         return (deckSize == 0);
     }
