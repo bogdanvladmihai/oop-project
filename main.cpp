@@ -374,7 +374,7 @@ public:
         players = std::vector<Player>(4);
     }
     bool finished() {
-        if (score.first == 8 || score.second == 8) {
+        if (score.first == 1 || score.second == 1) {
             return true;
         }
         return false;
