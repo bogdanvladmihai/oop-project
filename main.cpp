@@ -179,6 +179,10 @@ public:
         distr = std::uniform_int_distribution<int>(0, deckSize - 1);
     }
 
+    void clear() {
+        cards.clear();
+        deckSize = 0;
+    }
     int size() {
         return deckSize;
     }
@@ -329,6 +333,10 @@ public:
             Card Base;
             if (starts == 0) {
                 int id; std::cout << "Select the i-th card: "; std::cin >> id;
+                if (id == -1) {
+                    isFinished = true;
+                    break;
+                }
                 Base = players[0].getCard(id);
             } else {
                 Base = players[starts].getCard(0);
@@ -376,6 +384,7 @@ public:
             score.second++;
         }
 
+        D.clear();
         D = Deck(13);
         D.shuffleDeck();
         for (int i = 0; i < 4; i++) {
