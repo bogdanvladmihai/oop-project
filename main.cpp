@@ -374,9 +374,6 @@ public:
                 }
             }
         }
-        if (!isFinished) {
-            return;
-        }
         roundsPlayed++;
         if (players[0].getPoints() + players[2].getPoints() > players[1].getPoints() + players[3].getPoints()) {
             score.first++;
