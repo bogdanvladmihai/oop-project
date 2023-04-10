@@ -313,8 +313,9 @@ private:
     Deck D;
     std::pair<int, int> score;
     int roundsPlayed, starts;
+    bool isFinished;
 public:
-    Game() : players(4), D(13), score(0, 0), roundsPlayed(0), starts(0) {}
+    Game() : players(4), D(13), score(0, 0), roundsPlayed(0), starts(0), isFinished(false) {}
     void playRound() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -322,7 +323,7 @@ public:
             }
         }
         // TODO: add some corner cases
-        while (!D.empty()) {
+        while (!D.empty() && !isFinished) {
             std::vector<Card> taken;
             std::cout << players[0] << "\n";
             Card Base;
@@ -338,9 +339,16 @@ public:
                 Card Down;
                 if (pos == 0) {
                     int id; std::cout << "Select the i-th card: "; std::cin >> id;
+                    if (id == -1) {
+                        isFinished = true;
+                        break;
+                    }
                     Down = players[0].move(Base.getCardInfo().first, (starts % 2 == pos % 2), id);
                 } else {
                     Down = players[pos].move(Base.getCardInfo().first, (starts % 2 == pos % 2));
+                }
+                if (isFinished) {
+                    break;
                 }
                 taken.push_back(Down);
                 std::cout << Down << "\n";
@@ -358,6 +366,9 @@ public:
                 }
             }
         }
+        if (!isFinished) {
+            return;
+        }
         roundsPlayed++;
         if (players[0].getPoints() + players[2].getPoints() > players[1].getPoints() + players[3].getPoints()) {
             score.first++;
@@ -374,7 +385,7 @@ public:
         players = std::vector<Player>(4);
     }
     bool finished() {
-        if (score.first == 1 || score.second == 1) {
+        if (isFinished || score.first == 8 || score.second == 8) {
             return true;
         }
         return false;
