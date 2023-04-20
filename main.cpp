@@ -231,8 +231,8 @@ public:
     int getNumberOfCards() const {
         return (int)cards.size();
     }
-    void updateHand(std::vector<Card> &taken) {
-        for (Card &C : taken) {
+    void updateHand(const std::vector<Card> &taken) {
+        for (const Card &C : taken) {
             if (C.isPoint()) {
                 points++;
             }
