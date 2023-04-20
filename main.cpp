@@ -133,13 +133,13 @@ public:
         return *this;
     }
 
-    std::pair<int, int> getCardInfo() {
+    std::pair<int, int> getCardInfo() const {
         return std::make_pair(cardValue, color);
     }
-    bool isPoint() {
+    bool isPoint() const {
         return (cardValue == 10 || cardValue == 14);
     }
-    bool isImportant() {
+    bool isImportant() const {
         return isPoint() || (cardValue == 7);
     }
 
@@ -183,10 +183,10 @@ public:
         cards.clear();
         deckSize = 0;
     }
-    int size() {
+    int size() const {
         return deckSize;
     }
-    bool empty() {
+    bool empty() const {
         return (deckSize == 0);
     }
     void shuffleDeck() {
@@ -225,10 +225,10 @@ public:
         cards.erase(cards.begin() + pos);
         return answer;
     }
-    int getPoints() {
+    int getPoints() const {
         return points;
     }
-    int getNumberOfCards() {
+    int getNumberOfCards() const {
         return (int)cards.size();
     }
     void updateHand(std::vector<Card> &taken) {
@@ -326,7 +326,6 @@ public:
                 players[i].addCard(D.getCardAndRemoveIt());
             }
         }
-        // TODO: add some corner cases
         while (!D.empty() && !isFinished) {
             std::vector<Card> taken;
             std::cout << players[0] << "\n";
@@ -390,7 +389,7 @@ public:
         players.clear();
         players = std::vector<Player>(4);
     }
-    bool finished() {
+    bool finished() const {
         if (isFinished || score.first == 8 || score.second == 8) {
             return true;
         }
