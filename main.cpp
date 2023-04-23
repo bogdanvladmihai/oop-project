@@ -113,8 +113,8 @@ public:
             break;
         }
 
-        for (int i = 0; i < (int)colorString.size(); i++) {
-            design[0][DESIGN_SIZE - (int)colorString.size() + i] = colorString[i];
+        for (size_t i = 0; i < colorString.size(); i++) {
+            design[0][DESIGN_SIZE - colorString.size() + i] = colorString[i];
             design[DESIGN_SIZE - 1][i] = colorString[i];
         }
 
@@ -165,15 +165,16 @@ private:
     int deckSize;
     std::mt19937 gen;
     std::uniform_int_distribution<int> distr;
+    static const int NO_COLORS = 4;
 public:
     explicit Deck(int _deckSize) : deckSize(_deckSize) {
         for (int i = 0; i < deckSize; i++) {
-            for (int color = 0; color < 4; color++) {
+            for (int color = 0; color < NO_COLORS; color++) {
                 cards.push_back(Card(i + 2, color));
             }
         }
 
-        deckSize *= 4;
+        deckSize *= NO_COLORS;
         std::random_device rd;
         gen = std::mt19937(rd());
         distr = std::uniform_int_distribution<int>(0, deckSize - 1);
@@ -244,21 +245,21 @@ public:
     const Card move(int baseCardValue, bool win, int pos = -1) {
         if (pos == -1) {
             if (win) {
-                for (int i = 0; i < (int)cards.size(); i++) {
+                for (size_t i = 0; i < cards.size(); i++) {
                     if (cards[i].getCardInfo().first != 7 && cards[i].isPoint() && cards[i].getCardInfo().first != baseCardValue) {
                         pos = i;
                         break;
                     }
                 }
                 if (pos == -1) {
-                    for (int i = 0; i < (int)cards.size(); i++) {
+                    for (size_t i = 0; i < cards.size(); i++) {
                         if (cards[i].getCardInfo().first != 7 && cards[i].getCardInfo().first != baseCardValue) {
                             pos = i;
                             break;
                         }
                     }
                     if (pos == -1) {
-                        for (int i = 0; i < (int)cards.size(); i++) {
+                        for (size_t i = 0; i < cards.size(); i++) {
                             if (cards[i].getCardInfo().first != 7) {
                                 pos = i;
                                 break;
@@ -270,7 +271,7 @@ public:
                     }
                 }
             } else {
-                for (int i = 0; i < (int)cards.size(); i++) {
+                for (size_t i = 0; i < cards.size(); i++) {
                     if (cards[i].getCardInfo().first == baseCardValue) {
                         pos = i;
                         break;
@@ -288,7 +289,7 @@ public:
                             pos = 0;
                         }
                     } else {
-                        for (int i = 0; i < (int)cards.size(); i++) {
+                        for (size_t i = 0; i < cards.size(); i++) {
                             if (!cards[i].isImportant()) {
                                 pos = i;
                                 break;
@@ -414,4 +415,3 @@ int main() {
     std::cout << G << "\n";
     return 0;
 }
-
