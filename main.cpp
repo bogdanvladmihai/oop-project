@@ -318,11 +318,13 @@ private:
     std::pair<int, int> score;
     int roundsPlayed, starts;
     bool isFinished;
+    const int NO_PLAYERS = 4;
+    const int DECK_SIZE = 13;
 public:
-    Game() : players(4), D(13), score(0, 0), roundsPlayed(0), starts(0), isFinished(false) {}
+    Game() : players(4), D(DECK_SIZE), score(0, 0), roundsPlayed(0), starts(0), isFinished(false) {}
     void playRound() {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < NO_PLAYERS; i++) {
+            for (int j = 0; j < NO_PLAYERS; j++) {
                 players[i].addCard(D.getCardAndRemoveIt());
             }
         }
@@ -342,7 +344,7 @@ public:
             }
             taken.push_back(Base);
             std::cout << Base << "\n";
-            for (const int pos : {(starts + 1) % 4, (starts + 2) % 4, (starts + 3) % 4}) {
+            for (const int pos : {(starts + 1) % NO_PLAYERS, (starts + 2) % NO_PLAYERS, (starts + 3) % NO_PLAYERS}) {
                 Card Down;
                 if (pos == 0) {
                     int id; std::cout << "Select the i-th card: "; std::cin >> id;
@@ -367,8 +369,8 @@ public:
             std::cout << "Hard taken by " << (starts % 2 == 0 ? "your team!\n" : "oposite team!\n");
             players[starts].updateHand(taken);
             int numberOfCards = players[0].getNumberOfCards(), X = (int)D.size() / 4;
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < std::min(4 - numberOfCards, X); j++) {
+            for (int i = 0; i < NO_PLAYERS; i++) {
+                for (int j = 0; j < std::min(NO_PLAYERS - numberOfCards, X); j++) {
                     players[i].addCard(D.getCardAndRemoveIt());
                 }
             }
@@ -381,13 +383,10 @@ public:
         }
 
         D.clear();
-        D = Deck(13);
+        D = Deck(DECK_SIZE);
         D.shuffleDeck();
-        for (int i = 0; i < 4; i++) {
-            players[i] = Player();
-        }
         players.clear();
-        players = std::vector<Player>(4);
+        players = std::vector<Player>(NO_PLAYERS);
     }
     bool finished() const {
         if (isFinished || score.first == 8 || score.second == 8) {
@@ -415,3 +414,4 @@ int main() {
     std::cout << G << "\n";
     return 0;
 }
+
