@@ -1,6 +1,6 @@
 # OOP Proiect 1
 
-## Joc de septică românească
+## Joc de șeptică românească
 
 ### Tema 0
 
