@@ -318,10 +318,10 @@ private:
     std::pair<int, int> score;
     int roundsPlayed, starts;
     bool isFinished;
-    const int NO_PLAYERS = 4;
-    const int DECK_SIZE = 13;
+    static const int NO_PLAYERS = 4;
+    static const int DECK_SIZE = 13;
 public:
-    Game() : players(4), D(DECK_SIZE), score(0, 0), roundsPlayed(0), starts(0), isFinished(false) {}
+    Game() : players(NO_PLAYERS), D(DECK_SIZE), score(0, 0), roundsPlayed(0), starts(0), isFinished(false) {}
     void playRound() {
         for (int i = 0; i < NO_PLAYERS; i++) {
             for (int j = 0; j < NO_PLAYERS; j++) {
